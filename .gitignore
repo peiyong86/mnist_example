@@ -3,6 +3,9 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# Mnist data
+MNIST-data
+
 # ipynb
 *.ipynb
 
