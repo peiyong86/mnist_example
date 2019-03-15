@@ -27,15 +27,22 @@ def load_data():
     return train_data, train_labels, eval_data, eval_labels
 
 
-def init_model():
+def init_model(model_type='Baseline'):
     # create model and return
-    classifier = tf.estimator.BaselineClassifier(n_classes=N_CLASS)
+    if model_type == 'Baseline':
+    	classifier = tf.estimator.BaselineClassifier(n_classes=N_CLASS)
+    elif model_type == 'DNN':
+    	feature_columns = [tf.feature_column.numeric_column("x", shape=[784])]
+    	classifier = tf.estimator.DNNClassifier(
+    		feature_columns = feature_columns,
+    		n_classes=N_CLASS,
+    		hidden_units=[1024, 512, 256])
     return classifier
 
 
-def main(argv):
+def train_and_eval(model_type='DNN'):
     # init model
-    model = init_model()
+    model = init_model(model_type)
     # load data
     train_data, train_labels, eval_data, eval_labels = load_data()
     # train input fn
@@ -55,7 +62,16 @@ def main(argv):
         num_epochs=1,
         shuffle=False)
     eval_results = model.evaluate(input_fn=eval_input_fn)
-    print(eval_results)
+    return eval_results
+
+
+def main(argv):
+	results = dict()
+	for model_type in ['Baseline', 'DNN']:
+		re = train_and_eval(model_type)
+		results[model_type] = re
+	for k,v in results.items():
+		print("{}: {}".format(k, v))
 
 
 if __name__ == '__main__':
