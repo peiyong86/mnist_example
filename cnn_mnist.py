@@ -40,7 +40,7 @@ def init_model(model_type='Baseline'):
     return classifier
 
 
-def train_and_eval(model_type='DNN'):
+def train_and_eval(model_type='DNN', batch_size=100, num_epochs=1):
     # init model
     model = init_model(model_type)
     # load data
@@ -49,8 +49,8 @@ def train_and_eval(model_type='DNN'):
     train_input_fn = tf.estimator.inputs.numpy_input_fn(
     x={"x": train_data},
     y=train_labels,
-    batch_size=100,
-    num_epochs=1,
+    batch_size=batch_size,
+    num_epochs=num_epochs,
     shuffle=True)
     # train model
     model.train(input_fn=train_input_fn)
