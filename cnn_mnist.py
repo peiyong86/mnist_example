@@ -8,7 +8,9 @@ import tensorflow as tf
 
 
 tf.logging.set_verbosity(tf.logging.INFO)
-
+flags = tf.app.flags
+flags.DEFINE_string('model_type', 'Baseline', 'Model type in Baseline, DNN')
+FLAGs = flags.FLAGS
 
 N_CLASS = 10
 
@@ -66,12 +68,12 @@ def train_and_eval(model_type='DNN', batch_size=100, num_epochs=1):
 
 
 def main(argv):
-	results = dict()
-	for model_type in ['Baseline', 'DNN']:
-		re = train_and_eval(model_type)
-		results[model_type] = re
-	for k,v in results.items():
-		print("{}: {}".format(k, v))
+    results = dict()
+    model_type = FLAGs.model_type
+    re = train_and_eval(model_type)
+    results[model_type] = re
+    for k,v in results.items():
+        print("{}: {}".format(k, v))
 
 
 if __name__ == '__main__':
